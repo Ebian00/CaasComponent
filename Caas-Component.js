@@ -16,10 +16,6 @@ class CaasComponent extends LitElement {
     return html` <div id="placeholder" class="show-content"></div> `;
   }
   firstUpdated(changedProperties) {
-    changedProperties.forEach((oldValue, propName) => {
-      console.log(`${propName} changed. oldValue: ${oldValue}`);
-    });
-
     this.getResource();
   }
 
@@ -30,7 +26,6 @@ class CaasComponent extends LitElement {
       return;
     }
     var getElement = this.serverURL + this.id;
-    console.log(getElement);
     fetch(getElement, {
       method: "GET",
       mode: "cors", // no-cors, *cors, same-origin
@@ -44,12 +39,10 @@ class CaasComponent extends LitElement {
     }).then(result => { 
       if (result.status ===401||result.status ===402&&result.status ===403){
         this.shadowRoot.getElementById("placeholder").innerHTML = "the microservice can not handle the request!";
-      alert("the microservice can not handle the request!");
       console.log(result.body.message);
       return;
     } 
     else if (result.status===200){
-      console.log("the content was sent successfully");
      return result;
     }
     })
@@ -65,7 +58,6 @@ class CaasComponent extends LitElement {
         } else if (typeOfElement === "html") {
           this.renderHtml(responseText["response"]);
         } else if (typeOfElement === "pdf") {
-          //console.log("we are in the getPDF")
           this.getPDF(responseText["response"]);
         } else {
           alert("the type of the object is not supported");
@@ -73,7 +65,6 @@ class CaasComponent extends LitElement {
       })
       .catch((error) => {  
         this.shadowRoot.getElementById("placeholder").innerHTML = "the microservice is not reachable!";
-        alert("the microservice is not reachable!");
       });;
   }
 
@@ -82,9 +73,6 @@ class CaasComponent extends LitElement {
     const bytes = new Uint8Array(binaryString.length);
     const mappedData = bytes.map((byte, i) => binaryString.charCodeAt(i));
     const blob = new Blob([mappedData], { type: "application/pdf" });
-    console.log("here is the response");
-    console.log(res);
-    console.log(blob);
     const filename = "check";
     var a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
@@ -95,12 +83,8 @@ class CaasComponent extends LitElement {
   }
 
   renderImage(image) {
-    console.log("we are in the renderImage function");
-    console.log(this.shadowRoot);
     this.shadowRoot.getElementById("placeholder").innerHTML =
-      '<img width= 50% height= auto src="data:image/jpg;base64,' +
-      image +
-      '"></img>';
+      '<img width= 50% height= auto src="data:image/jpg;base64,' + image +'"></img>';
   }
 
   openPDF() {
