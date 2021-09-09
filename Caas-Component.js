@@ -10,7 +10,7 @@ class CaasComponent extends LitElement {
   constructor() {
     super();
     this.link = new Object();
-    this.serverURL = "https://localhost:8453/caas/getEntity/";
+    this.serverURL = "https://localhost:8443/caas/getEntity/";
   }
   render() {
     return html` <div id="placeholder" class="show-content"></div> `;
